@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Current Weather";
+}
+
+@model Weather
+
+<div class="text-center">
+    <h1 class="display-4">Get the Current Weather</h1>
+    <p>Enter your city name below to get the current weather.</p>
+</div>
+
+
+<div style="width: 20%; margin: 0 auto" class="text-center">
+    <div class="form-row align-items-center">
+        @using (Html.BeginForm("Index", "Weather", FormMethod.Get))
+        {            
+            <div class="form-group">
+                <input type="text" name="ZipCode" class="form-control text-center" maxlength="5" />
+            </div>
+            <br />
+
+            <input type="submit" value="Enter" class="btn btn-primary" />
+        }
+    </div>
+</div>
+
+<br />
+<div class="text-center align-items-center">
+    <h2>@Model.City</h2>
+    <h3>@Model.ZipCode</h3>
+
+    @if (Model.WxIcon == null)
+    {
+        <img src="@Html.Raw($"http://openweathermap.org/img/wn/02d@2x.png")" alt="condition pic">
+    }
+    else
+    {
+        <img src="@Html.Raw($"http://openweathermap.org/img/wn/{Model.WxIcon}@2x.png")" alt="condition pic">
+
+    }
+
+    <h3>@Model.WxCondition</h3>
+    <h4>@Model.WxDescription</h4>
+    <h2><strong>Temperature:</strong> @Model.Temp °C<br /></h2>
+
+    <table class="table">
+        <tr>
+            <td>
+                <strong>Feels Like:</strong> @Model.FeelsLike °C<br />
+                <strong>High:</strong> @Model.TempMax °C<br />
+                <strong>Low:</strong> @Model.TempMin °C<br />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <strong>Humidity:</strong> @Model.Humidity %<br />
+                <strong>Pressure:</strong> @Math.Round((@Model.Pressure * 0.02953), 2) inHg <br />
+                <strong>Wind Speed:</strong> @Model.WindSpeed kmh
+            </td>
+        </tr>
+        @*<tr>
+            <td>
+                <strong>Sunrise:</strong> @Model.Sunrise.ToLocalTime().ToString("h:mm tt") Central Time<br />
+                <strong>Sunset:</strong> @Model.Sunset.ToLocalTime().ToString("h:mm tt") Central Time<br />
+            </td>
+        </tr>*@
+        @*<tr>
+                <td>
+                    <strong>Latitude:</strong> @Model.Coordinate.Latitude<br />
+                    <strong>Longitude:</strong> @Model.Coordinate.Longitude
+                </td>
+            </tr>*@
+    </table>
+</div>
+
+<div class="map-responsive align-items-center">
+    <div class="text-center">
+        <iframe width="600" height="450" style="border:0" loading="lazy"
+                src="@Model.MapsURL" allowfullscreen>
+        </iframe>
+    </div>
+</div>
